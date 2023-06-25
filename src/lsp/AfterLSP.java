@@ -44,7 +44,7 @@ class AfterOrder {
 }
 
 abstract class AfterPaymentProcessor {
-    public abstract void pay(BeforeOrder order);
+    public abstract void pay(AfterOrder order);
 }
 
 class AfterDebitPaymentProcessor extends AfterPaymentProcessor {
@@ -55,7 +55,7 @@ class AfterDebitPaymentProcessor extends AfterPaymentProcessor {
     }
 
     @Override
-    public void pay(BeforeOrder order) {
+    public void pay(AfterOrder order) {
         System.out.println("직불카드 결제를 시작합니다.");
         System.out.println("비밀번호 확인: " + securityCode);
         System.out.println("결제가 완료되었습니다.");
@@ -71,7 +71,7 @@ class AfterCreditPaymentProcessor extends AfterPaymentProcessor {
     }
 
     @Override
-    public void pay(BeforeOrder order) {
+    public void pay(AfterOrder order) {
         System.out.println("신용카드 결제를 시작합니다.");
         System.out.println("비밀번호 확인: " + securityCode);
         System.out.println("결제가 완료되었습니다.");
@@ -87,7 +87,7 @@ class AfterBitcoinPaymentProcessor extends AfterPaymentProcessor {
     }
 
     @Override
-    public void pay(BeforeOrder order) {
+    public void pay(AfterOrder order) {
         System.out.println("비트코인 결제를 시작합니다.");
         System.out.println("비밀번호 확인: " + securityCode);
         System.out.println("결제가 완료되었습니다.");
@@ -103,7 +103,7 @@ class AfterKakaopayPaymentProcessor extends AfterPaymentProcessor {
     }
 
     @Override
-    public void pay(BeforeOrder order) {
+    public void pay(AfterOrder order) {
         System.out.println("카카오페이 결제를 시작합니다.");
         System.out.println("비밀번호 확인: " + email);
         System.out.println("결제가 완료되었습니다.");
@@ -114,7 +114,7 @@ class AfterKakaopayPaymentProcessor extends AfterPaymentProcessor {
 
 public class AfterLSP {
     public static void main(String[] args) {
-        BeforeOrder order = new BeforeOrder();
+        AfterOrder order = new AfterOrder();
         order.addItem("키보드", 1, 50);
         order.addItem("SSD", 1, 150);
         order.addItem("USB", 2, 5);
