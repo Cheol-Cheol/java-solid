@@ -1,5 +1,4 @@
-package lsp;
-
+package solid.ocp;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,51 +43,30 @@ class BeforeOrder {
     }
 }
 
-abstract class BeforePaymentProcessor {
-    public abstract void pay(BeforeOrder order, String securityCode);
-}
 
-class BeforeDebitPaymentProcessor extends BeforePaymentProcessor {
-    @Override
-    public void pay(BeforeOrder order, String securityCode) {
+class BeforePaymentProcessor{
+    public void payDebit(BeforeOrder order, String securityCode) {
         System.out.println("직불카드 결제를 시작합니다.");
         System.out.println("비밀번호 확인: " + securityCode);
         System.out.println("결제가 완료되었습니다.");
         order.setStatus("paid");
     }
-}
 
-class BeforeCreditPaymentProcessor extends BeforePaymentProcessor {
-    @Override
-    public void pay(BeforeOrder order, String securityCode) {
+    public void payCredit(BeforeOrder order, String securityCode) {
         System.out.println("신용카드 결제를 시작합니다.");
         System.out.println("비밀번호 확인: " + securityCode);
         System.out.println("결제가 완료되었습니다.");
         order.setStatus("paid");
     }
-}
 
-class BeforeBitcoinPaymentProcessor extends BeforePaymentProcessor {
-    @Override
-    public void pay(BeforeOrder order, String securityCode) {
+    public void payBitcoin(BeforeOrder order, String securityCode) {
         System.out.println("비트코인 결제를 시작합니다.");
         System.out.println("비밀번호 확인: " + securityCode);
         System.out.println("결제가 완료되었습니다.");
         order.setStatus("paid");
     }
 }
-
-class BeforeKakaopayPaymentProcessor extends BeforePaymentProcessor {
-    @Override
-    public void pay(BeforeOrder order, String email) {
-        System.out.println("카카오페이 결제를 시작합니다.");
-        System.out.println("비밀번호 확인: " + email);
-        System.out.println("결제가 완료되었습니다.");
-        order.setStatus("paid");
-    }
-}
-
-public class BeforeLSP {
+public class BeforeOCP {
     public static void main(String[] args) {
         BeforeOrder order = new BeforeOrder();
         order.addItem("키보드", 1, 50);
@@ -96,16 +74,10 @@ public class BeforeLSP {
         order.addItem("USB", 2, 5);
         System.out.println("결제 금액은 " + order.totalPrice() + " 입니다.");
 
-        BeforePaymentProcessor processorDebit = new BeforeDebitPaymentProcessor();
-        processorDebit.pay(order, "213232");
-
-        BeforePaymentProcessor processorCredit = new BeforeCreditPaymentProcessor();
-        processorCredit.pay(order, "232244");
-
-        BeforePaymentProcessor processorBitcoin = new BeforeBitcoinPaymentProcessor();
-        processorBitcoin.pay(order, "664464");
-
-        BeforePaymentProcessor processorKakaopay = new BeforeKakaopayPaymentProcessor();
-        processorKakaopay.pay(order, "dream1234@naver.com");
+        BeforePaymentProcessor processor = new BeforePaymentProcessor();
+        processor.payDebit(order,"3209301");
+        processor.payCredit(order,"1200322");
+        processor.payBitcoin(order,"3202321");
     }
+
 }

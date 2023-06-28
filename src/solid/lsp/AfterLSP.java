@@ -1,4 +1,4 @@
-package ocp;
+package solid.lsp;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,12 +44,18 @@ class AfterOrder {
 }
 
 abstract class AfterPaymentProcessor {
-    public abstract void pay(AfterOrder order, String securityCode);
+    public abstract void pay(AfterOrder order);
 }
 
-class DebitPaymentProcessor extends AfterPaymentProcessor {
+class AfterDebitPaymentProcessor extends AfterPaymentProcessor {
+    private String securityCode;
+
+    public AfterDebitPaymentProcessor(String securityCode) {
+        this.securityCode = securityCode;
+    }
+
     @Override
-    public void pay(AfterOrder order, String securityCode) {
+    public void pay(AfterOrder order) {
         System.out.println("직불카드 결제를 시작합니다.");
         System.out.println("비밀번호 확인: " + securityCode);
         System.out.println("결제가 완료되었습니다.");
@@ -57,9 +63,15 @@ class DebitPaymentProcessor extends AfterPaymentProcessor {
     }
 }
 
-class CreditPaymentProcessor extends AfterPaymentProcessor {
+class AfterCreditPaymentProcessor extends AfterPaymentProcessor {
+    private String securityCode;
+
+    public AfterCreditPaymentProcessor(String securityCode) {
+        this.securityCode = securityCode;
+    }
+
     @Override
-    public void pay(AfterOrder order, String securityCode) {
+    public void pay(AfterOrder order) {
         System.out.println("신용카드 결제를 시작합니다.");
         System.out.println("비밀번호 확인: " + securityCode);
         System.out.println("결제가 완료되었습니다.");
@@ -67,9 +79,15 @@ class CreditPaymentProcessor extends AfterPaymentProcessor {
     }
 }
 
-class BitcoinPaymentProcessor extends AfterPaymentProcessor {
+class AfterBitcoinPaymentProcessor extends AfterPaymentProcessor {
+    private String securityCode;
+
+    public AfterBitcoinPaymentProcessor(String securityCode) {
+        this.securityCode = securityCode;
+    }
+
     @Override
-    public void pay(AfterOrder order, String securityCode) {
+    public void pay(AfterOrder order) {
         System.out.println("비트코인 결제를 시작합니다.");
         System.out.println("비밀번호 확인: " + securityCode);
         System.out.println("결제가 완료되었습니다.");
@@ -77,7 +95,24 @@ class BitcoinPaymentProcessor extends AfterPaymentProcessor {
     }
 }
 
-public class AfterOCP {
+class AfterKakaopayPaymentProcessor extends AfterPaymentProcessor {
+    private String email;
+
+    public AfterKakaopayPaymentProcessor(String email) {
+        this.email = email;
+    }
+
+    @Override
+    public void pay(AfterOrder order) {
+        System.out.println("카카오페이 결제를 시작합니다.");
+        System.out.println("비밀번호 확인: " + email);
+        System.out.println("결제가 완료되었습니다.");
+        order.setStatus("paid");
+    }
+}
+
+
+public class AfterLSP {
     public static void main(String[] args) {
         AfterOrder order = new AfterOrder();
         order.addItem("키보드", 1, 50);
@@ -85,13 +120,17 @@ public class AfterOCP {
         order.addItem("USB", 2, 5);
         System.out.println("결제 금액은 " + order.totalPrice() + " 입니다.");
 
-        AfterPaymentProcessor processorDebit = new DebitPaymentProcessor();
-        processorDebit.pay(order, "213232");
+        AfterPaymentProcessor processorDebit = new AfterDebitPaymentProcessor("213232");
+        processorDebit.pay(order);
 
-        AfterPaymentProcessor processorCredit = new CreditPaymentProcessor();
-        processorCredit.pay(order, "232244");
+        AfterPaymentProcessor processorCredit = new AfterCreditPaymentProcessor("232244");
+        processorCredit.pay(order);
 
-        AfterPaymentProcessor processorBitcoin = new BitcoinPaymentProcessor();
-        processorBitcoin.pay(order, "664464");
+        AfterPaymentProcessor processorBitcoin = new AfterBitcoinPaymentProcessor("664464");
+        processorBitcoin.pay(order);
+
+        AfterPaymentProcessor processorKakaopay = new AfterKakaopayPaymentProcessor("dream1234@naver.com");
+        processorKakaopay.pay(order);
     }
+
 }
